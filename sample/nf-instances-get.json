@@ -1,0 +1,366 @@
+{
+  "validityPeriod": 0,
+  "nfInstances": [
+    {
+      "nfInstanceId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "plmnList": [
+        {
+          "mcc": "string",
+          "mnc": "string"
+        }
+      ],
+      "sNssais": [
+        {
+          "sst": 0,
+          "sd": "string"
+        }
+      ],
+      "perPlmnSnssaiList": [
+        {
+          "plmnId": {
+            "mcc": "string",
+            "mnc": "string"
+          },
+          "sNssaiList": [
+            {
+              "sst": 0,
+              "sd": "string"
+            }
+          ]
+        }
+      ],
+      "nsiList": [
+        "string"
+      ],
+      "fqdn": "string",
+      "ipv4Addresses": [
+        "198.51.100.1"
+      ],
+      "ipv6Addresses": [
+        "2001:db8:85a3::8a2e:370:7334"
+      ],
+      "capacity": 0,
+      "load": 0,
+      "locality": "string",
+      "priority": 0,
+      "udrInfo": {
+        "groupId": "string",
+        "supiRanges": [
+          {
+            "start": "string",
+            "end": "string",
+            "pattern": "string"
+          }
+        ],
+        "gpsiRanges": [
+          {
+            "start": "string",
+            "end": "string",
+            "pattern": "string"
+          }
+        ],
+        "externalGroupIdentifiersRanges": [
+          {
+            "start": "string",
+            "end": "string",
+            "pattern": "string"
+          }
+        ],
+        "supportedDataSets": [
+          "SUBSCRIPTION",
+          "string"
+        ]
+      },
+      "udmInfo": {
+        "groupId": "string",
+        "supiRanges": [
+          {
+            "start": "string",
+            "end": "string",
+            "pattern": "string"
+          }
+        ],
+        "gpsiRanges": [
+          {
+            "start": "string",
+            "end": "string",
+            "pattern": "string"
+          }
+        ],
+        "externalGroupIdentifiersRanges": [
+          {
+            "start": "string",
+            "end": "string",
+            "pattern": "string"
+          }
+        ],
+        "routingIndicators": [
+          "string"
+        ]
+      },
+      "ausfInfo": {
+        "groupId": "string",
+        "supiRanges": [
+          {
+            "start": "string",
+            "end": "string",
+            "pattern": "string"
+          }
+        ],
+        "routingIndicators": [
+          "string"
+        ]
+      },
+      "amfInfo": {
+        "amfSetId": "string",
+        "amfRegionId": "string",
+        "guamiList": [
+          {
+            "plmnId": {
+              "mcc": "string",
+              "mnc": "string"
+            },
+            "amfId": "string"
+          }
+        ],
+        "taiList": [
+          {
+            "plmnId": {
+              "mcc": "string",
+              "mnc": "string"
+            },
+            "tac": "string"
+          }
+        ],
+        "taiRangeList": [
+          {
+            "plmnId": {
+              "mcc": "string",
+              "mnc": "string"
+            },
+            "tacRangeList": [
+              {
+                "start": "string",
+                "end": "string",
+                "pattern": "string"
+              }
+            ]
+          }
+        ],
+        "backupInfoAmfFailure": [
+          {
+            "plmnId": {
+              "mcc": "string",
+              "mnc": "string"
+            },
+            "amfId": "string"
+          }
+        ],
+        "backupInfoAmfRemoval": [
+          {
+            "plmnId": {
+              "mcc": "string",
+              "mnc": "string"
+            },
+            "amfId": "string"
+          }
+        ],
+        "n2InterfaceAmfInfo": {
+          "ipv4EndpointAddress": [
+            "198.51.100.1"
+          ],
+          "ipv6EndpointAddress": [
+            "2001:db8:85a3::8a2e:370:7334"
+          ],
+          "amfName": "string"
+        }
+      },
+      "smfInfo": {
+        "sNssaiSmfInfoList": [
+          {
+            "sNssai": {
+              "sst": 0,
+              "sd": "string"
+            },
+            "dnnSmfInfoList": [
+              {
+                "dnn": "string"
+              }
+            ]
+          }
+        ],
+        "taiList": [
+          {
+            "plmnId": {
+              "mcc": "string",
+              "mnc": "string"
+            },
+            "tac": "string"
+          }
+        ],
+        "taiRangeList": [
+          {
+            "plmnId": {
+              "mcc": "string",
+              "mnc": "string"
+            },
+            "tacRangeList": [
+              {
+                "start": "string",
+                "end": "string",
+                "pattern": "string"
+              }
+            ]
+          }
+        ],
+        "pgwFqdn": "string",
+        "accessType": [
+          "3GPP_ACCESS"
+        ]
+      },
+      "upfInfo": {
+        "sNssaiUpfInfoList": [
+          {
+            "sNssai": {
+              "sst": 0,
+              "sd": "string"
+            },
+            "dnnUpfInfoList": [
+              {
+                "dnn": "string",
+                "dnaiList": [
+                  "string"
+                ],
+                "pduSessionTypes": [
+                  "IPV4",
+                  "string"
+                ]
+              }
+            ]
+          }
+        ],
+        "smfServingArea": [
+          "string"
+        ],
+        "interfaceUpfInfoList": [
+          {
+            "ipv4EndpointAddresses": [
+              "198.51.100.1"
+            ],
+            "ipv6EndpointAddresses": [
+              "2001:db8:85a3::8a2e:370:7334"
+            ],
+            "endpointFqdn": "string",
+            "networkInstance": "string"
+          }
+        ],
+        "iwkEpsInd": false,
+        "pduSessionTypes": [
+          "IPV4",
+          "string"
+        ]
+      },
+      "pcfInfo": {
+        "dnnList": [
+          "string"
+        ],
+        "supiRanges": [
+          {
+            "start": "string",
+            "end": "string",
+            "pattern": "string"
+          }
+        ],
+        "rxDiamHost": "string",
+        "rxDiamRealm": "string"
+      },
+      "bsfInfo": {
+        "dnnList": [
+          "string"
+        ],
+        "ipDomainList": [
+          "string"
+        ],
+        "ipv4AddressRanges": [
+          {
+            "start": "198.51.100.1",
+            "end": "198.51.100.1"
+          }
+        ],
+        "ipv6PrefixRanges": [
+          {
+            "start": "2001:db8:abcd:12::0/64",
+            "end": "2001:db8:abcd:12::0/64"
+          }
+        ]
+      },
+      "chfInfo": {
+        "supiRangeList": [
+          {
+            "start": "string",
+            "end": "string",
+            "pattern": "string"
+          }
+        ],
+        "gpsiRangeList": [
+          {
+            "start": "string",
+            "end": "string",
+            "pattern": "string"
+          }
+        ],
+        "plmnRangeList": [
+          {
+            "start": "string",
+            "end": "string",
+            "pattern": "string"
+          }
+        ]
+      },
+      "customInfo": {},
+      "recoveryTime": "2019-07-02T07:09:15.007Z",
+      "nfServicePersistence": false,
+      "nfServices": [
+        {
+          "serviceInstanceId": "string",
+          "versions": [
+            {
+              "apiVersionInUri": "string",
+              "apiFullVersion": "string",
+              "expiry": "2019-07-02T07:09:15.007Z"
+            }
+          ],
+          "fqdn": "string",
+          "ipEndPoints": [
+            {
+              "ipv4Address": "198.51.100.1",
+              "ipv6Address": "2001:db8:85a3::8a2e:370:7334",
+              "port": 0
+            }
+          ],
+          "apiPrefix": "string",
+          "defaultNotificationSubscriptions": [
+            {
+              "callbackUri": "string"
+            }
+          ],
+          "capacity": 0,
+          "load": 0,
+          "priority": 0,
+          "recoveryTime": "2019-07-02T07:09:15.007Z",
+          "chfServiceInfo": {
+            "primaryChfServiceInstance": "string",
+            "secondaryChfServiceInstance": "string"
+          },
+          "supportedFeatures": "string"
+        }
+      ],
+      "defaultNotificationSubscriptions": [
+        {
+          "callbackUri": "string"
+        }
+      ]
+    }
+  ],
+  "nrfSupportedFeatures": "string"
+}
