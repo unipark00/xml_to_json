@@ -6,6 +6,14 @@
 * need xml decoration with "xmlattr"
 
 ## Xml Format (Draft)
+* Give type information at attribute
+```
+<a type="integer">xxx</a>
+<b type="string">xxx</b>
+<c type="array:CCC">xxx</c>
+<d type="sequence">xxx</d> --> if omitted, default "sequence"
+```
+* Sample
 ```
 <nrf-pdu>
     <validityPeriod type="integer">7</validityPeriod>
