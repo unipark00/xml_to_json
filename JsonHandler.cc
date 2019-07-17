@@ -22,21 +22,6 @@ void JsonHandler::initMap()
 {
     try
     {
-/*
-        std::stringstream ss;
-        ss << "{ \"root\": { \"values\": [1, 2, 3, 4, 5 ] } }";
-        cout << ss.str() << endl;
-
-        pt::ptree pt;
-        pt::read_json(ss, pt);
-
-        BOOST_FOREACH(auto& vt, pt.get_child("root.values"))
-        {
-            assert(vt.first.empty());
-            cout << vt.second.data() << endl;
-        }
-        setMarkerLine();
-*/
         pt::ptree cfg;
         pt::read_json("config.json", cfg);
 

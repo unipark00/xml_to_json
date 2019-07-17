@@ -6,12 +6,39 @@
 * need xml decoration with "xmlattr"
 
 ## Xml Format (Draft)
-* Give type information at attribute
+* Give type information at xml tag
 ```
-<a type="integer">xxx</a>
-<b type="string">xxx</b>
-<c type="array:CCC">xxx</c>
-<d type="sequence">xxx</d> --> if omitted, default "sequence"
+[ XML ]
+<a type="integer">aaa</a>
+<b type="string">bbb</b>
+<c type="array:CCC">
+  <CCC>
+    ...
+  </CCC>
+  <CCC>
+  </CCC>
+</d>
+<d type="sequence"> --> if omitted, default "sequence"
+  <d1 type="string">ddd</d1>
+  <d2 type="integer">ddd</d2>
+</d> --> if omitted, default "sequence"
+
+[ JSON ]
+{
+  "a": aaa,
+  "b": "bbb",
+  "c": [
+    {
+      ...
+    },
+    {
+    }
+  ],
+  "d": {
+    "d1": "ddd"
+    "d2": ddd
+  }
+}
 ```
 * Sample
 ```

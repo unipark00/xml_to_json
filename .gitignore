@@ -1,3 +1,5 @@
 *.swp
 *.log
+*.org
+*.bak
 XmlToJson

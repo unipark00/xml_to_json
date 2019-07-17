@@ -27,6 +27,7 @@ public:
     bool        readXml(const std::string& filename);
     bool        writeJson(const std::string& filename);
 
+private:
     void        initMap();
     bool        findType(const std::string& name);
 
