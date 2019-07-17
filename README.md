@@ -40,7 +40,7 @@
   }
 }
 ```
-* Sample
+* Sample XML
 ```
 <nrf-pdu>
     <validityPeriod type="integer">7</validityPeriod>
@@ -106,4 +106,71 @@
     </nfInstances>
     <nrfSupportedFeatures type="string">80000000</nrfSupportedFeatures>
 </nrf-pdu>
+```
+* Sample JSON
+```
+{
+  "validityPeriod": 7,
+  "nfInstances": [
+    {
+      "nfInstanceId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "plmnList": [
+        {
+          "mcc": "45000",
+          "mnc": "005"
+        },
+        {
+          "mcc": "45000",
+          "mnc": "006"
+        }
+      ],
+      "perPlmnSnssaiList": [
+        {
+          "plmnId": {
+            "mcc": "45000",
+            "mnc": "005"
+          },
+          "sNssaiList": [
+            {
+              "sst": 0,
+              "sd": "1234567890"
+            },
+            {
+              "sst": 1,
+              "sd": "abcdefghij"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "nfInstanceId": "3fa85f64-5717-4562-b3fc-2c963f66afa7",
+      "plmnList": [
+        {
+          "mcc": "45000",
+          "mnc": "005"
+        }
+      ],
+      "perPlmnSnssaiList": [
+        {
+          "plmnId": {
+            "mcc": "45000",
+            "mnc": "005"
+          },
+          "sNssaiList": [
+            {
+              "sst": 0,
+              "sd": "1234567890"
+            },
+            {
+              "sst": 1,
+              "sd": "abcdefghij"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "nrfSupportedFeatures": "80000000"
+}
 ```
