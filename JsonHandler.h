@@ -25,6 +25,8 @@ public:
     //JsonHandler() { initMap(); }
 
     bool        readXml(const std::string& filename);
+
+    bool        readJson(const std::string& filename);
     bool        writeJson(const std::string& filename);
 
 private:

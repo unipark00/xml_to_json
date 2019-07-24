@@ -27,6 +27,12 @@ int main(int argc, char* argv[])
         return false; 
     }
 
+    if (!handler->readJson(argv[2]))
+    {
+        cout << "JsonHandler::readJson(" << argv[2] << ") failed" << endl;
+        return false; 
+    }
+
     cout << endl;
     cout << "JsonTester main End." << endl;
     return true;

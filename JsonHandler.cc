@@ -62,6 +62,7 @@ bool JsonHandler::findType(const std::string& name)
 
 bool JsonHandler::readXml(const std::string& filename)
 {
+    cout << "JsonHandler::readXml(" << filename << ")" << endl;
     try
     {
         // Create empty property tree object
@@ -80,6 +81,8 @@ bool JsonHandler::readXml(const std::string& filename)
         int idx = 0;
 
         ss << "{" << endl;
+        ss << "  \"SearchResult\": {" << endl;
+        int tab = 2;
         BOOST_FOREACH(pt::ptree::value_type& child, _tree.get_child("nrf-pdu"))
         {
         /*
@@ -95,25 +98,25 @@ bool JsonHandler::readXml(const std::string& filename)
 
             if (pt_type.type == JsonType::ARRAY || pt_type.type == JsonType::SEQUENCE)
             {
-                ss << getTab(1) <<  "\"" << child.first << "\": [" << endl;
-                getXmlArray(child.second, pt_type.name, 1);
-                ss << getTab(1) << "]";
+                ss << getTab(tab) <<  "\"" << child.first << "\": [" << endl;
+                getXmlArray(child.second, pt_type.name, tab);
+                ss << getTab(tab) << "]";
             }
             else if (pt_type.type == JsonType::STRING)
             {
-                ss << getTab(1) <<  "\"" << child.first << "\": \"" << child.second.data() << "\"";
+                ss << getTab(tab) <<  "\"" << child.first << "\": \"" << child.second.data() << "\"";
             }
             else if (pt_type.type == JsonType::INTEGER)
             {
-                ss << getTab(1) <<  "\"" << child.first << "\": " << child.second.data();
+                ss << getTab(tab) <<  "\"" << child.first << "\": " << child.second.data();
             }
 
             if (idx != child_size-1) { ss << "," << endl; }
             else { ss << endl; }
             idx++;
         }
+        ss << "  }" << endl;
         ss << "}" << endl;
-        ss << endl;
     }
     catch (const std::exception & ex)
     {
@@ -219,8 +222,49 @@ void JsonHandler::getXmlSequence(pt::ptree& pt, const std::string& tname, const 
     }
 }
 
+bool JsonHandler::readJson(const std::string& filename)
+{
+    cout << "JsonHandler::readJson(" << filename << ")" << endl;
+    try
+    {
+        pt::ptree _pt;
+        pt::read_json(filename, _pt);
+
+        pt::ptree result = _pt.get_child("SearchResult");
+        cout << "@ validityPeriod = " << result.get<int>("validityPeriod") << endl;
+
+        cout << "child size = " << result.size() << endl;
+        BOOST_FOREACH(pt::ptree::value_type& child, result)
+        {
+            if (child.first == "validityPeriod")
+            {
+                cout << "validityPeriod = " << child.second.data() << endl;
+            }
+            else if (child.first == "nrfSupportedFeatures")
+            {
+                cout << "nrfSupportedFeatures = " << child.second.data() << endl;
+            }
+            else
+            {
+                cout << child.first << endl;
+                BOOST_FOREACH(pt::ptree::value_type& child1, child.second)
+                {
+                    cout << "  " << child1.first << endl;
+                }
+            }
+        }
+        return true;
+    }
+    catch (const std::exception & ex)
+    {
+        cerr << "[JsonHandler::initMap] ERROR: " << ex.what() << endl;
+    }
+    return false;
+}
+
 bool JsonHandler::writeJson(const std::string& filename)
 {
+    cout << "JsonHandler::writeJson(" << filename << ")" << endl;
     try
     {
         ofstream json_file(filename);

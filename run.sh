@@ -10,5 +10,5 @@ echo "--------------------------------------------------"
 
 if [ -f "$OUTPUT" ]; then
     echo "--------------------------------------------------"
-    cat nf-instances-get.json
+    #cat nf-instances-get.json
 fi
