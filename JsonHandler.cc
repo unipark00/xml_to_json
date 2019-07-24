@@ -99,7 +99,7 @@ bool JsonHandler::readXml(const std::string& filename)
             if (pt_type.type == JsonType::ARRAY || pt_type.type == JsonType::SEQUENCE)
             {
                 ss << getTab(tab) <<  "\"" << child.first << "\": [" << endl;
-                getXmlArray(child.second, pt_type.name, tab);
+                readXmlArray(child.second, pt_type.name, tab);
                 ss << getTab(tab) << "]";
             }
             else if (pt_type.type == JsonType::STRING)
@@ -126,10 +126,10 @@ bool JsonHandler::readXml(const std::string& filename)
     return true;
 }
 
-void JsonHandler::getXmlArray(pt::ptree& pt, const std::string& tname, const int tab)
+void JsonHandler::readXmlArray(pt::ptree& pt, const std::string& tname, const int tab)
 {
     size_t child_size = pt.size();
-    //cout << "(getXmlArray) child size of '" << tname << "' : " << child_size << endl;
+    //cout << "(readXmlArray) child size of '" << tname << "' : " << child_size << endl;
 
     int idx = 0;
     BOOST_FOREACH(pt::ptree::value_type& child, pt)
@@ -139,7 +139,7 @@ void JsonHandler::getXmlArray(pt::ptree& pt, const std::string& tname, const int
         // <xmlattr> will be discarded ...
         if (tag == "<xmlattr>")
         {
-            //cout << "(getXmlArray) <xmlattr>skipped ..." << endl;
+            //cout << "(readXmlArray) <xmlattr>skipped ..." << endl;
             idx++;
             continue;
         }
@@ -150,13 +150,13 @@ void JsonHandler::getXmlArray(pt::ptree& pt, const std::string& tname, const int
         if (pt_type.type == JsonType::ARRAY)
         {
             ss << getTab(tab+1) <<  "\"" << child.first << "\": [" << endl;
-            getXmlArray(child.second, pt_type.name, tab+1);
+            readXmlArray(child.second, pt_type.name, tab+1);
             ss << getTab(tab+1) << "]";
         }
         else if (pt_type.type == JsonType::SEQUENCE)
         {
             ss << getTab(tab+1) << "{" << endl;
-            getXmlSequence(child.second, pt_type.name, tab+1);
+            readXmlSequence(child.second, pt_type.name, tab+1);
             ss << getTab(tab+1) << "}";
         }
         else if (pt_type.type == JsonType::STRING)
@@ -174,10 +174,10 @@ void JsonHandler::getXmlArray(pt::ptree& pt, const std::string& tname, const int
     }
 }
 
-void JsonHandler::getXmlSequence(pt::ptree& pt, const std::string& tname, const int tab)
+void JsonHandler::readXmlSequence(pt::ptree& pt, const std::string& tname, const int tab)
 {
     size_t child_size = pt.size();
-    //cout << "(getXmlSequence) child size of '" << tname << "' : " << child_size << endl;
+    //cout << "(readXmlSequence) child size of '" << tname << "' : " << child_size << endl;
 
     int idx = 0;
     BOOST_FOREACH(pt::ptree::value_type& child, pt)
@@ -187,7 +187,7 @@ void JsonHandler::getXmlSequence(pt::ptree& pt, const std::string& tname, const 
         // <xmlattr> will be discarded ...
         if (tag == "<xmlattr>")
         {
-            //cout << "(getXmlSequence) <xmlattr>skipped ..." << endl;
+            //cout << "(readXmlSequence) <xmlattr>skipped ..." << endl;
             idx++;
             continue;
         }
@@ -198,13 +198,13 @@ void JsonHandler::getXmlSequence(pt::ptree& pt, const std::string& tname, const 
         if (pt_type.type == JsonType::ARRAY)
         {
             ss << "[" << endl;
-            getXmlArray(child.second, pt_type.name, tab+1);
+            readXmlArray(child.second, pt_type.name, tab+1);
             ss << getTab(tab+1) << "]";
         }
         else if (pt_type.type == JsonType::SEQUENCE)
         {
             ss << "{" << endl;
-            getXmlSequence(child.second, pt_type.name, tab+1);
+            readXmlSequence(child.second, pt_type.name, tab+1);
             ss << getTab(tab+1) << "}";
         }
         else if (pt_type.type == JsonType::STRING)

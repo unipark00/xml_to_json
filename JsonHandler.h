@@ -33,8 +33,8 @@ private:
     void        initMap();
     bool        findType(const std::string& name);
 
-    void        getXmlArray(pt::ptree& pt, const std::string& tname, const int tab);
-    void        getXmlSequence(pt::ptree& pt, const std::string& tname, const int tab);
+    void        readXmlArray(pt::ptree& pt, const std::string& tname, const int tab);
+    void        readXmlSequence(pt::ptree& pt, const std::string& tname, const int tab);
     NodeType    getTypeAttr(pt::ptree& node);
 };
 
