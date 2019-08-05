@@ -2,5 +2,6 @@
 *.log
 *.org
 *.bak
+*.json
 XmlToJson
 tags

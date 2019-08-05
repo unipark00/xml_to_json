@@ -62,7 +62,7 @@ inline std::ostream& operator<<(std::ostream& os, const NodeType& type)
     return os;
 }
 
-inline std::string getTab(const int tab)
+inline std::string setTab(uint8_t tab)
 {
     std::string tabstr = "";
     for (int i = 0; i < tab; i++) 

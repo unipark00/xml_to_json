@@ -33,9 +33,9 @@ private:
     void        initMap();
     bool        findType(const std::string& name);
 
-    void        readXmlArray(pt::ptree& pt, const std::string& tname, const int tab);
-    void        readXmlSequence(pt::ptree& pt, const std::string& tname, const int tab);
-    NodeType    getTypeAttr(pt::ptree& node);
+    void        getXmlArray(pt::ptree& pt, const std::string& tname, uint8_t tab);
+    void        getXmlSequence(pt::ptree& pt, const std::string& tname, uint8_t tab);
+    NodeType    getXmlAttrType(pt::ptree& node);
 };
 
 #endif /* JSON_HANDLER_H_ */

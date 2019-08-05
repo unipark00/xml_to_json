@@ -3,15 +3,18 @@
 #include "JsonHandler.h"
 
 #ifdef __RAPIDJSON__
-#include "rapidjson/document.h"		// rapidjson's DOM-style API
-#include "rapidjson/prettywriter.h"	// for stringify JSON
+#include "rapidjson/document.h"		    // rapidjson's DOM-style API
+#include "rapidjson/prettywriter.h"	    // for stringify JSON
+#include "rapidjson/filereadstream.h"   // FileReadStream
+#include "rapidjson/istreamwrapper.h"   // IStreamWrapper
 
 using namespace rapidjson;
 #endif
 
 using namespace std;
 
-NodeType getTypeAttr(pt::ptree& node);
+void readJsonObject(Value& val, uint8_t tab);
+void readJsonArray(Value& val, uint8_t tab);
 
 void setMarkerLine()
 {
@@ -91,24 +94,24 @@ bool JsonHandler::readXml(const std::string& filename)
             std::tie(tag, sub_pt) = child;
 
             NodeType pt_type = getTypeAttr(sub_pt);
-            cout << getTab(1) <<  "tag: " << tag << ", type: " << pt_type << endl;
+            cout << setTab(1) <<  "tag: " << tag << ", type: " << pt_type << endl;
         */
             std::string tag = child.first;
-            NodeType pt_type = getTypeAttr(child.second);
+            NodeType pt_type = getXmlAttrType(child.second);
 
             if (pt_type.type == JsonType::ARRAY || pt_type.type == JsonType::SEQUENCE)
             {
-                ss << getTab(tab) <<  "\"" << child.first << "\": [" << endl;
-                readXmlArray(child.second, pt_type.name, tab);
-                ss << getTab(tab) << "]";
+                ss << setTab(tab) <<  "\"" << child.first << "\": [" << endl;
+                getXmlArray(child.second, pt_type.name, tab);
+                ss << setTab(tab) << "]";
             }
             else if (pt_type.type == JsonType::STRING)
             {
-                ss << getTab(tab) <<  "\"" << child.first << "\": \"" << child.second.data() << "\"";
+                ss << setTab(tab) <<  "\"" << child.first << "\": \"" << child.second.data() << "\"";
             }
             else if (pt_type.type == JsonType::INTEGER)
             {
-                ss << getTab(tab) <<  "\"" << child.first << "\": " << child.second.data();
+                ss << setTab(tab) <<  "\"" << child.first << "\": " << child.second.data();
             }
 
             if (idx != child_size-1) { ss << "," << endl; }
@@ -126,10 +129,10 @@ bool JsonHandler::readXml(const std::string& filename)
     return true;
 }
 
-void JsonHandler::readXmlArray(pt::ptree& pt, const std::string& tname, const int tab)
+void JsonHandler::getXmlArray(pt::ptree& pt, const std::string& tname, uint8_t tab)
 {
     size_t child_size = pt.size();
-    //cout << "(readXmlArray) child size of '" << tname << "' : " << child_size << endl;
+    //cout << "(getXmlArray) child size of '" << tname << "' : " << child_size << endl;
 
     int idx = 0;
     BOOST_FOREACH(pt::ptree::value_type& child, pt)
@@ -139,33 +142,33 @@ void JsonHandler::readXmlArray(pt::ptree& pt, const std::string& tname, const in
         // <xmlattr> will be discarded ...
         if (tag == "<xmlattr>")
         {
-            //cout << "(readXmlArray) <xmlattr>skipped ..." << endl;
+            //cout << "(getXmlArray) <xmlattr>skipped ..." << endl;
             idx++;
             continue;
         }
 
         //assert(tname == tag);
 
-        NodeType pt_type = getTypeAttr(child.second);
+        NodeType pt_type = getXmlAttrType(child.second);
         if (pt_type.type == JsonType::ARRAY)
         {
-            ss << getTab(tab+1) <<  "\"" << child.first << "\": [" << endl;
-            readXmlArray(child.second, pt_type.name, tab+1);
-            ss << getTab(tab+1) << "]";
+            ss << setTab(tab+1) <<  "\"" << child.first << "\": [" << endl;
+            getXmlArray(child.second, pt_type.name, tab+1);
+            ss << setTab(tab+1) << "]";
         }
         else if (pt_type.type == JsonType::SEQUENCE)
         {
-            ss << getTab(tab+1) << "{" << endl;
-            readXmlSequence(child.second, pt_type.name, tab+1);
-            ss << getTab(tab+1) << "}";
+            ss << setTab(tab+1) << "{" << endl;
+            getXmlSequence(child.second, pt_type.name, tab+1);
+            ss << setTab(tab+1) << "}";
         }
         else if (pt_type.type == JsonType::STRING)
         {
-            ss << getTab(tab+1) << "\"" << child.first << "\": \"" << child.second.data();
+            ss << setTab(tab+1) << "\"" << child.first << "\": \"" << child.second.data();
         }
         else if (pt_type.type == JsonType::INTEGER)
         {
-            ss << getTab(tab+1) << "\"" << child.first << "\": " << child.second.data();
+            ss << setTab(tab+1) << "\"" << child.first << "\": " << child.second.data();
         }
 
         if (idx != child_size-1) { ss << "," << endl; }
@@ -174,10 +177,10 @@ void JsonHandler::readXmlArray(pt::ptree& pt, const std::string& tname, const in
     }
 }
 
-void JsonHandler::readXmlSequence(pt::ptree& pt, const std::string& tname, const int tab)
+void JsonHandler::getXmlSequence(pt::ptree& pt, const std::string& tname, uint8_t tab)
 {
     size_t child_size = pt.size();
-    //cout << "(readXmlSequence) child size of '" << tname << "' : " << child_size << endl;
+    //cout << "(getXmlSequence) child size of '" << tname << "' : " << child_size << endl;
 
     int idx = 0;
     BOOST_FOREACH(pt::ptree::value_type& child, pt)
@@ -187,25 +190,25 @@ void JsonHandler::readXmlSequence(pt::ptree& pt, const std::string& tname, const
         // <xmlattr> will be discarded ...
         if (tag == "<xmlattr>")
         {
-            //cout << "(readXmlSequence) <xmlattr>skipped ..." << endl;
+            //cout << "(getXmlSequence) <xmlattr>skipped ..." << endl;
             idx++;
             continue;
         }
 
-        NodeType pt_type = getTypeAttr(child.second);
+        NodeType pt_type = getXmlAttrType(child.second);
 
-        ss << getTab(tab+1) <<  "\"" << child.first << "\": ";
+        ss << setTab(tab+1) <<  "\"" << child.first << "\": ";
         if (pt_type.type == JsonType::ARRAY)
         {
             ss << "[" << endl;
-            readXmlArray(child.second, pt_type.name, tab+1);
-            ss << getTab(tab+1) << "]";
+            getXmlArray(child.second, pt_type.name, tab+1);
+            ss << setTab(tab+1) << "]";
         }
         else if (pt_type.type == JsonType::SEQUENCE)
         {
             ss << "{" << endl;
-            readXmlSequence(child.second, pt_type.name, tab+1);
-            ss << getTab(tab+1) << "}";
+            getXmlSequence(child.second, pt_type.name, tab+1);
+            ss << setTab(tab+1) << "}";
         }
         else if (pt_type.type == JsonType::STRING)
         {
@@ -222,11 +225,184 @@ void JsonHandler::readXmlSequence(pt::ptree& pt, const std::string& tname, const
     }
 }
 
+std::string getJsonValType(int ntype)
+{
+    static const char* kTypeNames[] = { "Null", "False", "True", "Object", "Array", "String", "Number" }; 
+    std::stringstream ss;
+    ss << kTypeNames[ntype] << "(" << ntype << ")";
+    return ss.str();
+}
+
+void readJsonObject(const Value::Object& obj, uint8_t tab)
+{
+    for (Value::ConstMemberIterator itr = obj.MemberBegin(); itr != obj.MemberEnd(); ++itr)
+    {
+        std::string name = itr->name.GetString();
+        int type = itr->value.GetType();
+        cout << setTab(tab) << "\"" << name << "\" : ";
+        switch (type)
+        {
+        case 4: // Array
+            cout << getJsonValType(type) << endl;
+            readJsonArray(obj[name.c_str()], tab+1);
+            break;
+        case 5: // String
+            cout << getJsonValType(type) << " : \"" << itr->value.GetString() << "\"" << endl;
+            break;
+        case 6: // Number
+            cout << getJsonValType(type) << " : " << itr->value.GetInt() << endl;
+            break;
+        }
+    }
+}
+
+void readJsonArray(Value& val, uint8_t tab)
+{
+    assert(val.IsArray());
+    assert(val.Size() != 0);
+    cout << setTab(tab) << "array size : " << val.Size() << endl;
+    int idx = 0;
+    for (Value::ConstValueIterator itr = val.Begin(); itr != val.End(); ++itr)
+    for (auto& v : val.GetArray())
+    {
+        cout << setTab(tab) << "[" << idx++ << "] : ";
+        if (v.IsObject())
+        {
+            cout << getJsonValType(v.GetType()) << endl;
+            readJsonObject(v.GetObject(), tab+1);
+        }
+        else if (v.IsArray())
+        {
+            cout << getJsonValType(v.GetType()) << endl;
+        }
+        else if (v.IsInt())
+        {
+            cout << "Number Parsing ..." << endl;
+        }
+        else if (v.IsString())
+        {
+            cout << "String Parsing ..." << endl;
+        }
+    }
+}
+
+void ParseNode(const rapidjson::Value &node, size_t indent=0, unsigned int level=0, const std::string& nodeName="");
+
+std::string GetIndentString(size_t indent=0, unsigned int level=0)
+{
+    return std::move(std::string(level * indent, ' '));
+}
+
+void ParseObject(const rapidjson::Value &node, size_t indent = 0, unsigned int level = 0)
+{
+    std::cout << "{\n";
+
+    for (rapidjson::Value::ConstMemberIterator childNode = node.MemberBegin(); childNode != node.MemberEnd(); ++childNode)
+    {
+        ParseNode(childNode->value, indent, level + 1, childNode->name.GetString());
+    }
+
+    std::cout << GetIndentString(indent, level) << "}";
+}
+
+void ParseArray(const rapidjson::Value& node, size_t indent = 0, unsigned int level = 0)
+{
+    std::cout << "[\n";
+
+    for (rapidjson::SizeType i = 0; i < node.Size(); ++i)
+    {
+        ParseNode(node[i], indent, level + 1);
+    }
+
+    std::cout << GetIndentString(indent, level) << "]";
+}
+
+void ParseNode(const rapidjson::Value &node, size_t indent, unsigned int level, const std::string& nodeName)
+{
+    cout << GetIndentString(indent, level);
+    if (!nodeName.empty())
+        std::cout << nodeName << ": ";
+
+    if (node.IsBool())
+        std::cout << node.GetBool();
+
+    else if (node.IsInt())
+        std::cout << node.GetInt();
+
+    else if (node.IsUint())
+        std::cout << node.GetUint();
+
+    else if (node.IsInt64())
+        std::cout << node.GetInt64();
+
+    else if (node.IsUint64())
+        std::cout << node.GetUint64();
+
+    else if (node.IsDouble())
+        std::cout << node.GetDouble();
+
+    else if (node.IsString())
+        std::cout << node.GetString();
+
+    else if (node.IsArray())
+    {
+        if (!nodeName.empty()) std::cout << "\n" << GetIndentString(indent, level);
+            ParseArray(node, indent, level);
+    }
+
+    else if (node.IsObject())
+    {
+        if (!nodeName.empty()) std::cout << "\n" << GetIndentString(indent, level);
+            ParseObject(node, indent, level);
+    }
+
+    std::cout << "\n";
+}
+
 bool JsonHandler::readJson(const std::string& filename)
 {
-    cout << "JsonHandler::readJson(" << filename << ")" << endl;
+    std::string filename1("02_nnrf-disc_nf-instances_get.json");
+    cout << "JsonHandler::readJson(" << filename1 << ")" << endl;
     try
     {
+#ifdef __RAPIDJSON__
+        Document doc;
+        
+        ////////////////////////////////////////////////////////////////////////////
+        // 1. Parse a JSON text string to a document.
+        std::ifstream ifs("02_nnrf-disc_nf-instances_get.json"); 
+        IStreamWrapper isw(ifs);
+        if (doc.ParseStream(isw).HasParseError())
+        {
+            cerr << "[ERROR] HasParseError ..." << endl;
+            return false;
+        }
+        cout << "Parsing to document succeeded.\n" << endl;
+
+        ////////////////////////////////////////////////////////////////////////////
+        // 2. Access values in document.
+        setMarkerLine();
+        cout << "# Access values in document:\n" << endl;
+        assert(doc.IsObject());    // Document is a JSON value represents the root of DOM. Root can be either an object or array.
+
+        assert(doc.HasMember("nfInstances"));
+/*
+        for (Value::ConstMemberIterator itr = doc.MemberBegin(); itr != doc.MemberEnd(); ++itr)
+        {
+            std::string name = itr->name.GetString();
+            int type = itr->value.GetType();
+            cout << "\"" << name << "\" : ";
+            switch (type)
+            {
+            case 4: // Array
+                cout << getJsonValType(type) << endl;
+                readJsonArray(doc[name.c_str()], 1);
+                break;
+            }
+        }
+*/
+        ParseNode(doc, 2);
+#else // property_tree
         pt::ptree _pt;
         pt::read_json(filename, _pt);
 
@@ -253,11 +429,12 @@ bool JsonHandler::readJson(const std::string& filename)
                 }
             }
         }
+#endif
         return true;
     }
     catch (const std::exception & ex)
     {
-        cerr << "[JsonHandler::initMap] ERROR: " << ex.what() << endl;
+        cerr << "[JsonHandler::readJson] ERROR: " << ex.what() << endl;
     }
     return false;
 }
@@ -297,8 +474,8 @@ bool JsonHandler::writeJson(const std::string& filename)
         cout << "--------------------------------------------------" << endl;
         {
             // 1. Parse a JSON string into DOM
-            const char* json = "{\"project\":\"rapidjson\",\"stars\":10}";
             Document doc;
+            const char* json = "{\"project\":\"rapidjson\",\"stars\":10}";
             doc.Parse(json);
 
             // 2. Modify it by DOM
@@ -343,7 +520,7 @@ bool JsonHandler::writeJson(const std::string& filename)
             cout << buffer.GetString() << endl;
         }
 #endif
-    } 
+    }
     catch (const std::exception & ex)
     {
         cerr << "[JsonHandler::writeJson] ERROR: " << ex.what() << endl;
@@ -352,7 +529,7 @@ bool JsonHandler::writeJson(const std::string& filename)
     return true;
 }
 
-NodeType JsonHandler::getTypeAttr(pt::ptree& node)
+NodeType JsonHandler::getXmlAttrType(pt::ptree& node)
 {
     try
     {
